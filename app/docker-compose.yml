@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${APP__DB__USER}
+      POSTGRES_PASSWORD: ${APP__DB__PASSWORD}
+      POSTGRES_DB: ${APP__DB__NAME}
+    ports:
+      - "${APP__DB__PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    ports:
+      - "${APP__REDIS__PORT}:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
