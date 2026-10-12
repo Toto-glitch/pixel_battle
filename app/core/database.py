@@ -1,0 +1,23 @@
+from collections.abc import AsyncGenerator
+
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
+from .config import settings
+
+engine = create_async_engine(url=settings.db.url)
+SessionLocal = async_sessionmaker(engine, expire_on_commit=False)
+
+async def close_db_connection() -> None:
+    await engine.dispose()
+
+async def get_session() -> AsyncGenerator[AsyncSession, None]:
+    async with SessionLocal() as session:
+        try:
+            yield session
+            await session.commit()
+        except SQLAlchemyError:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()
