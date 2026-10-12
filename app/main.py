@@ -2,7 +2,7 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 import uvicorn
-from core import close_redis_connection, settings
+from core import close_db_connection, close_redis_connection, settings
 from fastapi import FastAPI
 
 
@@ -12,6 +12,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
     print("closing app...")
     await close_redis_connection()
+    await close_db_connection()
 
 
 app = FastAPI(lifespan=lifespan)
