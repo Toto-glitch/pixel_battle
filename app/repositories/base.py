@@ -35,3 +35,9 @@ class BaseRepository(Generic[T]):
     async def remove(self, model_instance: T) -> None:
         await self._session.delete(model_instance)
         await self._session.flush()
+
+    async def get_by(self, **kwargs: Any) -> T | None:
+        query = select(self.model).filter_by(**kwargs)
+        result = await self._session.execute(query)
+        model_instance = result.scalar_one_or_none()
+        return model_instance
