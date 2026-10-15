@@ -1,6 +1,10 @@
 from .config import settings
 from .database import close_db_connection, engine, get_session
-from .exceptions import TokenException
+from .exceptions import (
+    InvalidCredentialsException,
+    TokenException,
+    UserAlreadyExistsException,
+)
 from .redis import close_redis_connection, redis
 from .security import (
     create_access_token,
@@ -10,7 +14,9 @@ from .security import (
 )
 
 __all__ = (
+    "InvalidCredentialsException",
     "TokenException",
+    "UserAlreadyExistsException",
     "close_db_connection",
     "close_redis_connection",
     "create_access_token",
