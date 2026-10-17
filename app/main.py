@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 import uvicorn
 from core import close_db_connection, close_redis_connection, settings
 from fastapi import FastAPI
+from routers import api_router
 
 
 @asynccontextmanager
@@ -16,6 +17,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(api_router)
 
 if __name__ == "__main__":
     uvicorn.run(
